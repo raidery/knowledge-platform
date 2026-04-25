@@ -96,14 +96,12 @@ pip install uv
 2. 创建并激活虚拟环境
 ```sh
 uv venv
-source .venv/bin/activate  # Linux/Mac
-# 或
-.\.venv\Scripts\activate  # Windows
+source .venv/bin/activate
 ```
 
 3. 安装依赖
 ```sh
-uv add pyproject.toml
+uv sync
 ```
 
 4. 启动服务

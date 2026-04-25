@@ -30,11 +30,11 @@
         </template>
         <div flex flex-wrap justify-between>
           <n-card
-            v-for="i in 9"
+            v-for="i in 3"
             :key="i"
             class="mb-10 mt-10 w-300 cursor-pointer"
             hover:card-shadow
-            title="Vue FastAPI Admin"
+            title="知识问答管理平台"
             size="small"
           >
             <p op-60>{{ dummyText }}</p>
