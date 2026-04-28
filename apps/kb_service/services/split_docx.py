@@ -4,9 +4,7 @@ SplitDocxService — 封装 split_docx_by_section.py 的核心逻辑
 import os
 import uuid
 import re
-import io
 import shutil
-import zipfile
 from pathlib import Path
 from dataclasses import dataclass
 
@@ -66,15 +64,6 @@ class SplitDocxService:
         self._temp_dirs.append(temp_dir)
         return temp_dir
 
-    def _write_section_bytes(self, data: bytes, temp_dir: str, index: int, title: str) -> str:
-        """将 section bytes 写入临时文件，返回文件路径"""
-        safe = re.sub(r'[\\/:*?"<>|]', "_", title)[:60]
-        filename = f"section_{index:02d}_{safe}.docx"
-        file_path = os.path.join(temp_dir, filename)
-        with open(file_path, "wb") as f:
-            f.write(data)
-        return file_path
-
     def split(
         self,
         file_path: str,
@@ -118,7 +107,6 @@ class SplitDocxService:
                 disable_fonts=True,
             )
         except Exception as e:
-            self.cleanup()
             raise SplitError(f"切分失败: {e}") from e
 
         # 解析临时目录中的输出文件，构建 SectionMeta 列表
@@ -134,17 +122,18 @@ class SplitDocxService:
                 title = "_intro"
                 index = 0
             else:
-                # 找到最后一个 _ 分隔的位置，提取 index 和 title
-                # 但 title 本身可能含有下划线，所以用 rsplit 取最后两部分
-                parts = name.split("_")
-                # 最后一段是 index（两位数字），倒数第二段是 title
-                index_part = parts[-1]
-                title_part = "_".join(parts[2:])  # 跳过 原文件名(index)
-                try:
-                    index = int(index_part)
-                except ValueError:
+                # 使用 rsplit 从右边分割，最多分成3部分: [stem, index_part, title]
+                parts = name.rsplit("_", 2)
+                if len(parts) >= 2 and parts[-1].isdigit():
+                    index_part = parts[-1]
+                    title = parts[2] if len(parts) >= 3 else ""
+                    try:
+                        index = int(index_part)
+                    except ValueError:
+                        index = 0
+                else:
                     index = 0
-                title = title_part
+                    title = ""
 
             sections.append(SectionMeta(
                 title=title,
