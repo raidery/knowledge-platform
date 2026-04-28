@@ -13,6 +13,8 @@ try:
 except ImportError:
     raise SettingNotFound("Can not import settings")
 
+from apps.kb_service.main import create_kb_app as create_kb_service_app
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -32,6 +34,10 @@ def create_rbac_app() -> FastAPI:
     )
     register_exceptions(_app)
     _app.include_router(rbac_router, prefix="/api/v1")
+
+    kb_app = create_kb_service_app()
+    _app.mount("/api/v1/kb", kb_app)
+
     return _app
 
 
