@@ -28,21 +28,21 @@ class Settings(BaseSettings):
             # SQLite configuration
             "sqlite": {
                 "engine": "tortoise.backends.sqlite",
-                "credentials": {"file_path": f"{BASE_DIR}/db.sqlite3"},  # Path to SQLite database file
+                "credentials": {"file_path": f"{BASE_DIR}/db.sqlite3"},
             },
             # MySQL/MariaDB configuration
             # Install with: tortoise-orm[asyncmy]
             # "mysql": {
             #     "engine": "tortoise.backends.mysql",
             #     "credentials": {
-            #         "host": "localhost",  # Database host address
-            #         "port": 3306,  # Database port
-            #         "user": "yourusername",  # Database username
-            #         "password": "yourpassword",  # Database password
-            #         "database": "yourdatabase",  # Database name
+            #         "host": "localhost",
+            #         "port": 3306,
+            #         "user": "yourusername",
+            #         "password": "yourpassword",
+            #         "database": "yourdatabase",
             #     },
             # },
-                        # PostgreSQL configuration
+            # PostgreSQL configuration (Docker: host.docker.internal, native: localhost)
             "postgres": {
                 "engine": "tortoise.backends.asyncpg",
                 "credentials": {
@@ -53,24 +53,16 @@ class Settings(BaseSettings):
                     "database": "rag_db",
                 },
             },
-            # PostgreSQL configuration (alternative)
-            #         "host": "localhost",  # Database host address
-            #         "port": 5432,  # Database port
-            #         "user": "yourusername",  # Database username
-            #         "password": "yourpassword",  # Database password
-            #         "database": "yourdatabase",  # Database name
-            #     },
-            # },
             # MSSQL/Oracle configuration
             # Install with: tortoise-orm[asyncodbc]
             # "oracle": {
             #     "engine": "tortoise.backends.asyncodbc",
             #     "credentials": {
-            #         "host": "localhost",  # Database host address
-            #         "port": 1433,  # Database port
-            #         "user": "yourusername",  # Database username
-            #         "password": "yourpassword",  # Database password
-            #         "database": "yourdatabase",  # Database name
+            #         "host": "localhost",
+            #         "port": 1433,
+            #         "user": "yourusername",
+            #         "password": "yourpassword",
+            #         "database": "yourdatabase",
             #     },
             # },
             # SQLServer configuration
@@ -78,11 +70,11 @@ class Settings(BaseSettings):
             # "sqlserver": {
             #     "engine": "tortoise.backends.asyncodbc",
             #     "credentials": {
-            #         "host": "localhost",  # Database host address
-            #         "port": 1433,  # Database port
-            #         "user": "yourusername",  # Database username
-            #         "password": "yourpassword",  # Database password
-            #         "database": "yourdatabase",  # Database name
+            #         "host": "localhost",
+            #         "port": 1433,
+            #         "user": "yourusername",
+            #         "password": "yourpassword",
+            #         "database": "yourdatabase",
             #     },
             # },
         },
@@ -91,9 +83,13 @@ class Settings(BaseSettings):
                 "models": ["apps.rbac.models", "aerich.models"],
                 "default_connection": "postgres",
             },
+            "kb_service": {
+                "models": ["apps.kb_service.models", "aerich.models"],
+                "default_connection": "postgres",
+            },
         },
-        "use_tz": False,  # Whether to use timezone-aware datetimes
-        "timezone": "Asia/Shanghai",  # Timezone setting
+        "use_tz": False,
+        "timezone": "Asia/Shanghai",
     }
     DATETIME_FORMAT: str = "%Y-%m-%d %H:%M:%S"
 
