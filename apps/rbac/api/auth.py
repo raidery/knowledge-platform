@@ -13,7 +13,7 @@ from apps.rbac.services.permission_service import DependAuth
 from apps.rbac.services.user_service import user_service
 from apps.rbac.utils.password import get_password_hash, verify_password
 
-router = APIRouter()
+router = APIRouter(tags=["RBAC"])
 
 
 @router.post("/access_token", summary="获取token")

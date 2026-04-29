@@ -1,5 +1,5 @@
 import os
-import uuid
+import re
 from pathlib import Path
 
 
@@ -10,9 +10,8 @@ def ensure_dir(path: str) -> str:
 
 def save_upload_file(file_content: bytes, filename: str, upload_dir: str) -> str:
     ensure_dir(upload_dir)
-    ext = Path(filename).suffix
-    unique_name = f"{uuid.uuid4().hex}{ext}"
-    file_path = os.path.join(upload_dir, unique_name)
+    safe_name = re.sub(r'[\\/:*?"<>|]', "_", filename)
+    file_path = os.path.join(upload_dir, safe_name)
     with open(file_path, "wb") as f:
         f.write(file_content)
     return file_path

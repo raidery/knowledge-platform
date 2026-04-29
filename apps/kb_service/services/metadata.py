@@ -22,6 +22,7 @@ class MetadataService:
         business_id: str,
         doc_type: DocumentType,
         backend: Backend,
+        dataset_id: str | None = None,
         callback_url: str | None = None,
     ) -> IngestJob:
         job_data = {
@@ -36,5 +37,6 @@ class MetadataService:
             "file_name": file_name,
             "file_size": file_size,
             "callback_url": callback_url,
+            "dataset_id": dataset_id,
         }
         return await self.repo.create_ingest_job(**job_data)

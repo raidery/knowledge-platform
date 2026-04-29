@@ -3,5 +3,7 @@ from .batch import router as batch_router
 from .review import router as review_router
 from .callback import router as callback_router
 from .query import router as query_router
+from .monitor import router as monitor_router
+from .datasets import router as datasets_router
 
-__all__ = ["ingest_router", "batch_router", "review_router", "callback_router", "query_router"]
+__all__ = ["ingest_router", "batch_router", "review_router", "callback_router", "query_router", "monitor_router", "datasets_router"]

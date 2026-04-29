@@ -7,7 +7,7 @@ from apps.rbac.models.auditlog import AuditLog
 from apps.rbac.schemas.base import SuccessExtra
 from apps.rbac.services.permission_service import DependPermission
 
-router = APIRouter()
+router = APIRouter(tags=["RBAC"])
 
 
 @router.get("/list", summary="查看操作日志", dependencies=[DependPermission])

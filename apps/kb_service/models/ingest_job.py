@@ -46,6 +46,7 @@ class IngestJob(BaseModel, TimestampMixin):
     parent_job_id = fields.CharField(max_length=64, null=True, description="父文档job_id，切分场景下指向原文档")
     section_title = fields.CharField(max_length=255, null=True, description="节标题，如'第1节 问题分析'")
     section_index = fields.IntField(null=True, description="节序号，0=前言，1+=正文节")
+    dataset_id = fields.CharField(max_length=64, null=True, description="目标知识库ID（Dify Dataset ID）")
 
     class Meta:
         table = "kb_ingest_job"

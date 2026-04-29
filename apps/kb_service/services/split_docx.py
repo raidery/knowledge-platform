@@ -18,6 +18,9 @@ SIZE_LARGE = 20 * 1024 * 1024
 # 默认节标题正则
 DEFAULT_PATTERN = r"(第\s*[一二三四五六七八九十百千万0-9]+\s*节|Section\s+\d+)"
 
+# 切分输出根目录
+SPLIT_OUTPUT_ROOT = Path("/tmp/kb_datasets")
+
 
 @dataclass
 class SectionMeta:
@@ -112,7 +115,15 @@ class SplitDocxService:
         # 解析临时目录中的输出文件，构建 SectionMeta 列表
         sections: list[SectionMeta] = []
         temp_dir_path = Path(out_dir)
+        input_stem = Path(file_path).stem
+        final_dir = SPLIT_OUTPUT_ROOT / input_stem
+        final_dir.mkdir(parents=True, exist_ok=True)
+
+        print(f"[SPLIT DEBUG] temp_dir={out_dir}, stem={input_stem}, final_dir={final_dir}")
+        print(f"[SPLIT DEBUG] temp files: {list(temp_dir_path.glob('*.docx'))}")
+
         for f in sorted(temp_dir_path.glob("*.docx")):
+            print(f"[SPLIT DEBUG] moving {f} -> {final_dir / f.name}, exists={f.exists()}, size={f.stat().st_size}")
             name = f.stem  # e.g. "原文件_intro" / "原文件_01_第1节"
             data = f.read_bytes()
 
@@ -135,10 +146,14 @@ class SplitDocxService:
                     index = 0
                     title = ""
 
+            # 移动到最终目录 ./datasets/{stem}/
+            final_path = final_dir / f.name
+            shutil.move(str(f), str(final_path))
+
             sections.append(SectionMeta(
                 title=title,
                 index=index,
-                file_path=str(f),
+                file_path=str(final_path),
                 file_size=len(data),
             ))
 
@@ -155,5 +170,5 @@ class SplitDocxService:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.cleanup()
+        #self.cleanup()
         return False

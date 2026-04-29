@@ -49,7 +49,7 @@
 import { useUserStore } from '@/store'
 import { useI18n } from 'vue-i18n'
 
-const dummyText = '一个基于 Vue3.0、FastAPI、Naive UI 的轻量级后台管理模板'
+const dummyText = '知识库检索开发运维平台'
 const { t } = useI18n({ useScope: 'global' })
 
 const statisticData = computed(() => [

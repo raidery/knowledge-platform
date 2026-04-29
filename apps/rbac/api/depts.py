@@ -5,7 +5,7 @@ from apps.rbac.schemas.dept import DeptCreate, DeptUpdate
 from apps.rbac.services.dept_service import dept_service
 from apps.rbac.services.permission_service import DependPermission
 
-router = APIRouter()
+router = APIRouter(tags=["RBAC"])
 
 
 @router.get("/list", summary="查看部门列表", dependencies=[DependPermission])

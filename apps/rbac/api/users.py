@@ -11,7 +11,7 @@ from apps.rbac.services.user_service import user_service
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter()
+router = APIRouter(tags=["RBAC"])
 
 
 @router.get("/list", summary="查看用户列表", dependencies=[DependPermission])

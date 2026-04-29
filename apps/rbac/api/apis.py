@@ -6,7 +6,7 @@ from apps.rbac.schemas.base import Success, SuccessExtra
 from apps.rbac.services.api_service import api_service
 from apps.rbac.services.permission_service import DependPermission
 
-router = APIRouter()
+router = APIRouter(tags=["RBAC"])
 
 
 @router.get("/list", summary="查看API列表", dependencies=[DependPermission])

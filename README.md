@@ -1,10 +1,10 @@
 <p align="center">
-  <a href="https://github.com/mizhexiaoxiao/vue-fastapi-admin">
-    <img alt="Vue FastAPI Admin Logo" width="200" src="https://github.com/mizhexiaoxiao/vue-fastapi-admin/blob/main/deploy/sample-picture/logo.svg">
+  <a href="https://github.com/mizhexiaoxiao/knowledge-platform">
+    <img alt="Vue FastAPI Admin Logo" width="200" src="https://github.com/mizhexiaoxiao/knowledge-platform/blob/main/deploy/sample-picture/logo.svg">
   </a>
 </p>
 
-<h1 align="center">vue-fastapi-admin</h1>
+<h1 align="center">knowledge-platform</h1>
 
 [English](./README-en.md) | 简体中文
 
@@ -16,40 +16,14 @@
 - **动态路由**：后端动态路由，结合 RBAC（Role-Based Access Control）权限模型，提供精细的菜单路由控制。
 - **JWT鉴权**：使用 JSON Web Token（JWT）进行身份验证和授权，增强应用的安全性。
 - **细粒度权限控制**：实现按钮和接口级别的权限控制，确保不同用户或角色在界面操作和接口访问时具有不同的权限限制。
-
-### 在线预览
-- [http://47.111.145.81:3000](http://47.111.145.81:3000)
-- username: admin
-- password: 123456
-
-### 登录页
-
-![image](https://github.com/mizhexiaoxiao/vue-fastapi-admin/blob/main/deploy/sample-picture/login.jpg)
-### 工作台
-
-![image](https://github.com/mizhexiaoxiao/vue-fastapi-admin/blob/main/deploy/sample-picture/workbench.jpg)
-
-### 用户管理
-
-![image](https://github.com/mizhexiaoxiao/vue-fastapi-admin/blob/main/deploy/sample-picture/user.jpg)
-### 角色管理
-
-![image](https://github.com/mizhexiaoxiao/vue-fastapi-admin/blob/main/deploy/sample-picture/role.jpg)
-
-### 菜单管理
-
-![image](https://github.com/mizhexiaoxiao/vue-fastapi-admin/blob/main/deploy/sample-picture/menu.jpg)
-
-### API管理
-
-![image](https://github.com/mizhexiaoxiao/vue-fastapi-admin/blob/main/deploy/sample-picture/api.jpg)
+- **智能队列处理**：根据文件大小自动决定是否使用 Redis Queue 异步处理任务，提升系统响应性能
 
 ### 快速开始
 #### 方法一：dockerhub拉取镜像
 
 ```sh
-docker pull mizhexiaoxiao/vue-fastapi-admin:latest 
-docker run -d --restart=always --name=vue-fastapi-admin -p 9999:80 mizhexiaoxiao/vue-fastapi-admin
+docker pull mizhexiaoxiao/knowledge-platform:latest 
+docker run -d --restart=always --name=knowledge-platform -p 9999:80 mizhexiaoxiao/knowledge-platform
 ```
 
 #### 方法二：dockerfile构建镜像
@@ -63,15 +37,15 @@ systemctl start docker
 ##### 构建镜像
 
 ```sh
-git clone https://github.com/mizhexiaoxiao/vue-fastapi-admin.git
-cd vue-fastapi-admin
-docker build --no-cache . -t vue-fastapi-admin
+git clone https://github.com/mizhexiaoxiao/knowledge-platform.git
+cd knowledge-platform
+docker build --no-cache . -t knowledge-platform
 ```
 
 ##### 启动容器
 
 ```sh
-docker run -d --restart=always --name=vue-fastapi-admin -p 9999:80 vue-fastapi-admin
+docker run -d --restart=always --name=knowledge-platform -p 9999:80 knowledge-platform
 ```
 
 ##### 访问
@@ -154,6 +128,46 @@ pnpm i # 或者 npm i
 pnpm dev
 ```
 
+### Redis Queue 队列处理
+
+本系统集成了 Redis Queue (RQ) 来处理耗时任务，特别是大文件的处理。系统会根据文件大小自动决定是否使用队列异步处理：
+
+#### 使用方法
+
+1. 配置环境变量：
+```bash
+cp .env.example .env
+# 编辑 .env 文件根据需要调整配置
+```
+
+2. 启动服务：
+```bash
+# 方式一：分别启动
+python run.py  # 启动主应用
+./scripts/start_rq_dashboard.sh  # 启动 Dashboard
+
+# 方式二：一键启动
+./scripts/start_all.sh
+```
+
+3. 启动 Worker：
+```bash
+python apps/kb_service/workers/start_worker.py
+```
+
+4. 测试队列功能：
+```bash
+python test/test_queue_functionality.py
+```
+
+这样，系统现在可以根据文件大小自动决定是否使用 Redis Queue 异步处理任务，大于 1MB 的文件会自动使用队列处理，而小于等于 1MB 的文件会同步处理。阈值可以通过环境变量 QUEUE_SIZE_THRESHOLD 进行配置。
+
+现在，用户可以在 .env 文件中使用以下任何一种格式来设置 QUEUE_SIZE_THRESHOLD：
+- QUEUE_SIZE_THRESHOLD=1048576 （原始字节格式）
+- QUEUE_SIZE_THRESHOLD=1M （更易读的格式）
+- QUEUE_SIZE_THRESHOLD=1MB （带字节单位的格式）
+- QUEUE_SIZE_THRESHOLD=1m 或 QUEUE_SIZE_THRESHOLD=1mb （小写格式）
+
 ### 目录说明
 
 ```
@@ -216,27 +230,3 @@ pnpm dev
             ├── system     // 系统管理页面
             └── workbench  // 工作台页面
 ```
-
-### 进群交流
-进群的条件是给项目一个star，小小的star是作者维护下去的动力。
-
-你可以在群里提出任何疑问，我会尽快回复答疑。
-
-<img width="300" src="https://github.com/mizhexiaoxiao/vue-fastapi-admin/blob/main/deploy/sample-picture/group.jpg">
-
-## 打赏
-如果项目有帮助到你，可以请作者喝杯咖啡~
-
-<div style="display: flex">
-    <img src="https://github.com/mizhexiaoxiao/vue-fastapi-admin/blob/main/deploy/sample-picture/1.jpg" width="300">
-    <img src="https://github.com/mizhexiaoxiao/vue-fastapi-admin/blob/main/deploy/sample-picture/2.jpg" width="300">
-</div>
-
-## 定制开发
-如果有基于该项目的定制需求或其他合作，请添加下方微信，备注来意
-
-<img width="300" src="https://github.com/mizhexiaoxiao/vue-fastapi-admin/blob/main/deploy/sample-picture/3.jpg">
-
-### Visitors Count
-
-<img align="left" src = "https://profile-counter.glitch.me/vue-fastapi-admin/count.svg" alt="Loading">

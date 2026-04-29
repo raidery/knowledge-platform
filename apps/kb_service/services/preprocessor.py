@@ -45,8 +45,19 @@ class DocumentPreprocessor:
         return file_path
 
     def split_document(
-        self, file_path: str, pages_per_chunk: int = 50, max_chunks: int = 100
+        self,
+        file_path: str,
+        pages_per_chunk: int = 50,
+        max_chunks: int = 100,
+        split_level: int | None = None,
+        split_pattern: str | None = None,
+        force_split: bool = False,
     ) -> list[DocumentChunk]:
+        # 参数安全默认值
+        split_level = split_level if split_level is not None else 3
+        split_pattern = split_pattern or r"(第\s*[一二三四五六七八九十百千万0-9]+\s*节|Section\s+\d+)"
+        force_split = force_split if force_split else False
+
         # 按页拆分（物理拆分，不是语义chunking）
         # Phase 1: 简单实现，返回单个完整文件
         return [

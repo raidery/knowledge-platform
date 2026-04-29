@@ -1,13 +1,21 @@
 import uvicorn
-from uvicorn.config import LOGGING_CONFIG
+from dotenv import load_dotenv
+from loguru import logger
+
+# 加载 .env 环境变量
+load_dotenv()
 
 if __name__ == "__main__":
-    # 修改默认日志配置
-    LOGGING_CONFIG["formatters"]["default"]["fmt"] = "%(asctime)s - %(levelname)s - %(message)s"
-    LOGGING_CONFIG["formatters"]["default"]["datefmt"] = "%Y-%m-%d %H:%M:%S"
-    LOGGING_CONFIG["formatters"]["access"][
-        "fmt"
-    ] = '%(asctime)s - %(levelname)s - %(client_addr)s - "%(request_line)s" %(status_code)s'
-    LOGGING_CONFIG["formatters"]["access"]["datefmt"] = "%Y-%m-%d %H:%M:%S"
+    # 配置loguru
+    logger.remove()
+    logger.add(
+        "logs/uvicorn.log",
+        rotation="500 MB",
+        retention="10 days",
+        level="INFO",
+        format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {name}:{function}:{line} | {message}"
+    )
 
-    uvicorn.run("apps.main:app", host="0.0.0.0", port=9999, reload=True, log_config=LOGGING_CONFIG)
+    logger.info("Starting uvicorn server")
+
+    uvicorn.run("apps.main:app", host="0.0.0.0", port=9999, reload=True)
