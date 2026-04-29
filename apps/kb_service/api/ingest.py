@@ -59,6 +59,12 @@ async def ingest_document(
     upload_dir = os.environ.get("UPLOAD_DIR", "/tmp/kb_uploads")
     file_path = save_upload_file(await file.read(), file.filename, upload_dir)
 
+    # 获取文件大小
+    file_size = os.path.getsize(file_path)
+
+    # 判断是否走队列异步处理（>1MB 且无 sections）
+    use_queue = file_size > QUEUE_SIZE_THRESHOLD
+
     with SplitDocxService() as split_svc:
         # 2. 判定是否切分
         sections: list[SectionMeta] = []
@@ -72,8 +78,32 @@ async def ingest_document(
 
         pipeline = IngestPipeline()
 
+        if not sections and use_queue:
+            # 大文件走队列异步处理
+            job = queue_manager.enqueue_task(
+                process_ingest_task,
+                file_path=file_path,
+                business_id=business_id,
+                callback_url=callback_url,
+                enable_split=enable_split,
+                pages_per_chunk=pages_per_chunk,
+                max_chunks=max_chunks,
+                split_level=split_level,
+                split_pattern=split_pattern,
+                force_split=force_split,
+                queue_name="ingest"
+            )
+            return IngestResponse(
+                job_id=job.id,
+                doc_id="",
+                status="queued",
+                created_at=str(job.created_at),
+                sections_count=None,
+                sections=None,
+            )
+
+        # 小文件或已有 sections：同步处理
         if not sections:
-            # 不切分场景：原流程
             result = await pipeline.run(
                 file_path=file_path,
                 business_id=business_id,
