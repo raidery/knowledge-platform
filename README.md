@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://github.com/mizhexiaoxiao/knowledge-platform">
-    <img alt="Vue FastAPI Admin Logo" width="200" src="https://github.com/mizhexiaoxiao/knowledge-platform/blob/main/deploy/sample-picture/logo.svg">
+  <a href="https://github.com/raidery/knowledge-platform">
+    <img alt="Vue FastAPI Admin Logo" width="200" src="https://github.com/raidery/knowledge-platform/blob/main/deploy/sample-picture/logo.svg">
   </a>
 </p>
 
@@ -22,8 +22,8 @@
 #### 方法一：dockerhub拉取镜像
 
 ```sh
-docker pull mizhexiaoxiao/knowledge-platform:latest 
-docker run -d --restart=always --name=knowledge-platform -p 9999:80 mizhexiaoxiao/knowledge-platform
+docker pull raidery/knowledge-platform:latest 
+docker run -d --restart=always --name=knowledge-platform -p 9999:80 raidery/knowledge-platform
 ```
 
 #### 方法二：dockerfile构建镜像
@@ -37,7 +37,7 @@ systemctl start docker
 ##### 构建镜像
 
 ```sh
-git clone https://github.com/mizhexiaoxiao/knowledge-platform.git
+git clone https://github.com/raidery/knowledge-platform.git
 cd knowledge-platform
 docker build --no-cache . -t knowledge-platform
 ```

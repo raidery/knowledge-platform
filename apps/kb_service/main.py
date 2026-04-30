@@ -28,13 +28,14 @@ def create_kb_app() -> FastAPI:
     )
     register_exceptions(_app)
 
-    _app.include_router(ingest_router, tags=["ingest"])
-    _app.include_router(batch_router, tags=["batch"])
-    _app.include_router(review_router, tags=["review"])
-    _app.include_router(callback_router, tags=["callback"])
-    _app.include_router(query_router, tags=["query"])
-    _app.include_router(datasets_router, tags=["datasets"])
-    _app.include_router(monitor_router, tags=["monitor"], prefix="/monitor")
+    _app.include_router(datasets_router, tags=["datasets"])  # 数据集管理 - 创建/查询/删除知识库数据集
+    _app.include_router(ingest_router, tags=["ingest"])  # 文档摄入 - 单文档上传解析并写入向量库
+    _app.include_router(batch_router, tags=["batch"])  # 批量处理 - 批量文档摄入任务管理
+    _app.include_router(review_router, tags=["review"])  # 审核流程 - 摄入文档的审核与发布
+    _app.include_router(callback_router, tags=["callback"])  # 回调通知 - Dify 回调与结果回传
+    _app.include_router(query_router, tags=["query"])  # 知识查询 - 知识库检索与问答
+
+    _app.include_router(monitor_router, tags=["monitor"], prefix="/monitor")  # 监控指标 - 服务健康状态与任务队列监控
 
     @_app.get("/health", tags=["health"])
     async def health():

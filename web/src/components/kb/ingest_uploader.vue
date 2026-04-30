@@ -76,8 +76,7 @@ const canUpload = computed(() => {
   return form.value.business_id && selectedFile.value
 })
 
-function handleFileChange(options) {
-  const file = options.file
+function handleFileChange(file) {
   if (file) {
     selectedFile.value = file.file
   }

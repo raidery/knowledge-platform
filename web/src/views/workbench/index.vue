@@ -56,6 +56,7 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useUserStore } from '@/store'
 import { useI18n } from 'vue-i18n'
 import KbIngestUploader from '@/components/kb/ingest_uploader.vue'
