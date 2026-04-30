@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
 import { setupRouterGuard } from './guard'
-import { basicRoutes, EMPTY_ROUTE, NOT_FOUND_ROUTE } from './routes'
+import { basicRoutes, EMPTY_ROUTE, NOT_FOUND_ROUTE, asyncRoutes } from './routes'
 import { getToken, isNullOrWhitespace } from '@/utils'
 import { useUserStore, usePermissionStore } from '@/store'
 
@@ -43,6 +43,10 @@ export async function addDynamicRoutes() {
     const accessRoutes = await permissionStore.generateRoutes()
     await permissionStore.getAccessApis()
     accessRoutes.forEach((route) => {
+      !router.hasRoute(route.name) && router.addRoute(route)
+    })
+    // 添加本地异步路由（如 kb_service/route.js）
+    asyncRoutes.forEach((route) => {
       !router.hasRoute(route.name) && router.addRoute(route)
     })
     router.hasRoute(EMPTY_ROUTE.name) && router.removeRoute(EMPTY_ROUTE.name)
