@@ -23,7 +23,8 @@
       "label_upcoming": "待办",
       "label_information": "消息",
       "label_project": "项目",
-      "label_more": "更多"
+      "label_more": "更多",
+      "label_ingest": "文档上传"
     },
     "profile": {
       "label_profile": "个人中心",

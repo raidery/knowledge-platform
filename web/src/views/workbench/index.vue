@@ -41,6 +41,16 @@
           </n-card>
         </div>
       </n-card>
+
+      <n-card
+        :title="$t('views.workbench.label_ingest')"
+        size="small"
+        :segmented="true"
+        mt-15
+        rounded-10
+      >
+        <kb-ingest-uploader title="文档上传" />
+      </n-card>
     </div>
   </AppPage>
 </template>
@@ -48,6 +58,7 @@
 <script setup>
 import { useUserStore } from '@/store'
 import { useI18n } from 'vue-i18n'
+import KbIngestUploader from '@/components/kb/ingest_uploader.vue'
 
 const dummyText = '知识库检索开发运维平台'
 const { t } = useI18n({ useScope: 'global' })

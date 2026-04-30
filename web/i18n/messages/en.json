@@ -23,7 +23,8 @@
       "label_upcoming": "Upcoming",
       "label_information": "Information",
       "label_project": "Project",
-      "label_more": "More"
+      "label_more": "More",
+      "label_ingest": "Document Upload"
     },
     "profile": {
       "label_profile": "Profile",
